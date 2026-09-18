@@ -4,22 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rockys Gym — Nizampet, Hyderabad</title>
-<meta name="description" content="Rockys Gym, Hill County, Nizampet Hyderabad — demo website preview. Rated 5.0 (635 Justdial ratings). Strength, aerobics & more.">
+<meta name="description" content="Rockys Gym, Nizampet Hyderabad — demo website preview. Contact on WhatsApp.">
+<!--
+  PERMANENT MOTION STANDARD (GOWTHAM, 2026-09-18):
+  dark #09090b palette · asymmetric Bento Grid · py-24 · micro-borders ·
+  backdrop-blur glassmorphism · scroll reveals (slide up + scale + fade from blur) ·
+  3D-tilt / scale hovers · cubic-bezier(0.16,1,0.3,1) · fluid clamp() type ·
+  explicit aspect ratios (zero layout shift). React/Tailwind/Framer Motion build
+  variant: demo_react_template.jsx
+-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/framer-motion@11/dist/framer-motion.js"></script>
 <script>
+  /* ---- Motion engine config (Framer Motion UMD, animates DOM via WAAPI) ---- */
   const EASE = [0.16, 1, 0.3, 1];
   document.addEventListener("DOMContentLoaded", () => {
     const { animate, inView, stagger } = window.Motion;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* scroll reveals: slide up + scale + fade from blur */
     inView("[data-reveal]", (el) => {
       if (reduced) return;
       animate(el.target,
         { opacity: [0, 1], transform: ["translateY(48px) scale(0.94)", "translateY(0px) scale(1)"], filter: ["blur(10px)", "blur(0px)"] },
         { duration: 0.9, delay: (parseFloat(el.target.dataset.reveal) || 0), ease: EASE });
     }, { margin: "0px 0px -12% 0px" });
+
+    /* 3D tilt hovers (pointer-fine devices only) */
     if (matchMedia("(pointer:fine)").matches && !reduced) {
       document.querySelectorAll("[data-tilt]").forEach((card) => {
         card.style.transformPerspective = "900px";
@@ -27,13 +40,16 @@
           const r = card.getBoundingClientRect();
           const x = (e.clientX - r.left) / r.width - 0.5;
           const y = (e.clientY - r.top) / r.height - 0.5;
-          animate(card, { rotateX: -y * 8, rotateY: x * 8, scale: 1.02 }, { duration: 0.35, ease: EASE });
+          animate(card, { rotateX: -y * 8, rotateY: x * 8, scale: 1.02 },
+            { duration: 0.35, ease: EASE });
         });
         card.addEventListener("pointerleave", () => {
           animate(card, { rotateX: 0, rotateY: 0, scale: 1 }, { duration: 0.5, ease: EASE });
         });
       });
     }
+
+    /* staggered hero entrance */
     if (!reduced) {
       animate("[data-hero-stagger]",
         { opacity: [0, 1], transform: ["translateY(28px)", "translateY(0)"] },
@@ -42,11 +58,12 @@
   });
 </script>
 <style>
+  /* ============ DESIGN TOKENS — dark premium ============ */
   :root{
-    --bg:#09090b; --card:rgba(255,255,255,.04);
+    --bg:#09090b; --bg-soft:#111113; --card:rgba(255,255,255,.04);
     --line:rgba(255,255,255,.06); --line-strong:rgba(255,255,255,.12);
     --ink:#fafafa; --ink-soft:#a1a1aa; --ink-faint:#71717a;
-    --accent:#e4e4e7; --lime:#a3e635; --lime-soft:rgba(163,230,53,.12);
+    --accent:#e4e4e7; --wa:#22c55e; --wa-dark:#16a34a;
     --radius:20px; --ease:cubic-bezier(0.16,1,0.3,1);
     --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
     --step--1:clamp(0.85rem,0.82rem + 0.2vw,0.95rem);
@@ -59,49 +76,60 @@
   html{scroll-behavior:smooth}
   body{font-family:var(--font);font-size:var(--step-0);line-height:1.6;color:var(--ink);
     background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  :focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
+  img{max-width:100%;display:block}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+  /* ============ DEMO RIBBON ============ */
   .demo-ribbon{position:sticky;top:0;z-index:50;text-align:center;
     background:repeating-linear-gradient(45deg,#18181b,#18181b 12px,#27272a 12px,#27272a 24px);
     color:#fde68a;font-size:.78rem;font-weight:600;letter-spacing:.08em;
     padding:.5rem 1rem;text-transform:uppercase}
+
+  /* ============ LAYOUT ============ */
   .wrap{width:min(1150px,92%);margin-inline:auto}
-  section{padding:clamp(4rem,8vw,6rem) 0}
-  header.site{position:sticky;top:2.2rem;z-index:40;background:rgba(9,9,11,.7);
-    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+  section{padding:clamp(4rem,8vw,6rem) 0} /* py-24 spirit at every viewport */
+
+  /* ============ HEADER ============ */
+  header.site{position:sticky;top:2.2rem;z-index:40;
+    background:rgba(9,9,11,.7);backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line)}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 0}
-  .brand{font-weight:900;font-size:var(--step-1);letter-spacing:-.02em;color:var(--ink);text-decoration:none;text-transform:uppercase}
-  .brand span{color:var(--lime)}
+  .brand{font-weight:800;font-size:var(--step-1);letter-spacing:-.02em;color:var(--ink);text-decoration:none}
   .nav a.btn{padding:.55rem 1.15rem;font-size:.88rem}
-  .btn{display:inline-flex;align-items:center;gap:.55rem;background:var(--accent);color:#09090b;
-    text-decoration:none;font-weight:700;border-radius:999px;padding:.85rem 1.7rem;
-    border:1px solid var(--line-strong);
+
+  /* ============ BUTTONS ============ */
+  .btn{display:inline-flex;align-items:center;gap:.55rem;background:var(--accent);
+    color:#09090b;text-decoration:none;font-weight:700;border-radius:999px;
+    padding:.85rem 1.7rem;border:1px solid var(--line-strong);
     transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s var(--ease)}
   .btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 10px 30px rgba(255,255,255,.08)}
   .btn:active{transform:translateY(0) scale(.99)}
-  .btn.lime{background:var(--lime);color:#1a2e05;border-color:rgba(163,230,53,.45)}
-  .btn.lime:hover{background:#bef264}
+  .btn.wa{background:var(--wa);color:#052e12;border-color:rgba(34,197,94,.4)}
+  .btn.wa:hover{background:var(--wa-dark);color:#f0fdf4}
   .btn.ghost{background:rgba(255,255,255,.03);color:var(--ink);border:1px solid var(--line-strong)}
   .btn.ghost:hover{background:rgba(255,255,255,.08)}
-  .hero{padding-top:clamp(4rem,9vw,7rem);position:relative}
-  .hero::before{content:"";position:absolute;top:-120px;left:50%;transform:translateX(-50%);
-    width:640px;height:420px;border-radius:50%;background:rgba(163,230,53,.08);
-    filter:blur(120px);pointer-events:none}
+
+  /* ============ HERO ============ */
+  .hero{padding-top:clamp(4rem,9vw,7rem)}
   .kicker{display:inline-block;background:rgba(255,255,255,.04);border:1px solid var(--line);
     color:var(--ink-soft);font-weight:600;font-size:.8rem;letter-spacing:.14em;
     text-transform:uppercase;border-radius:999px;padding:.4rem 1.05rem;margin-bottom:1.4rem}
-  h1{font-size:var(--step-3);line-height:1.06;letter-spacing:-.03em;font-weight:900;max-width:15ch;text-transform:uppercase}
-  h1 em{font-style:normal;background:linear-gradient(90deg,#a3e635 10%,#fafafa 90%);
+  h1{font-size:var(--step-3);line-height:1.06;letter-spacing:-.03em;font-weight:800;max-width:16ch}
+  h1 em{font-style:normal;background:linear-gradient(90deg,#fafafa 20%,#71717a);
     -webkit-background-clip:text;background-clip:text;color:transparent}
-  p.lead{max-width:46ch;margin:1.4rem 0 2.2rem;color:var(--ink-soft);font-size:var(--step-1)}
+  p.lead{max-width:44ch;margin:1.4rem 0 2.2rem;color:var(--ink-soft);font-size:var(--step-1)}
   .cta-row{display:flex;gap:.9rem;flex-wrap:wrap}
-  h2.sec{font-size:var(--step-2);letter-spacing:-.02em;font-weight:800;max-width:26ch;text-transform:uppercase}
-  p.sec-sub{color:var(--ink-soft);margin:.7rem 0 3rem;max-width:54ch}
+
+  /* ============ BENTO GRID ============ */
+  h2.sec{font-size:var(--step-2);letter-spacing:-.02em;font-weight:700;max-width:24ch}
+  p.sec-sub{color:var(--ink-soft);margin:.7rem 0 3rem;max-width:52ch}
   .bento{display:grid;gap:1rem;grid-template-columns:repeat(6,1fr)}
-  .tile{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  .tile{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
     backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
     padding:clamp(1.5rem,3vw,2.5rem);position:relative;overflow:hidden;
     transition:border-color .3s var(--ease);will-change:transform}
-  .tile:hover{border-color:rgba(163,230,53,.4)}
+  .tile:hover{border-color:var(--line-strong)}
   .t-a{grid-column:span 4;grid-row:span 2}
   .t-b{grid-column:span 2;grid-row:span 2}
   .t-c{grid-column:span 3}
@@ -110,42 +138,53 @@
     .t-a,.t-b,.t-c,.t-d{grid-column:span 2;grid-row:auto}}
   @media(max-width:560px){.bento{grid-template-columns:1fr}
     .t-a,.t-b,.t-c,.t-d{grid-column:span 1}}
+
   .tile .icon{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;
-    background:var(--lime-soft);border:1px solid rgba(163,230,53,.3);font-size:1.25rem;
-    color:var(--lime);margin-bottom:1.1rem}
+    background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:1.25rem;
+    color:var(--ink);margin-bottom:1.1rem}
   .tile h3{font-size:var(--step-1);letter-spacing:-.015em;font-weight:700}
   .tile p{color:var(--ink-soft);margin-top:.5rem;font-size:var(--step--1)}
-  .stat{font-size:var(--step-3);font-weight:900;letter-spacing:-.03em;line-height:1;
-    background:linear-gradient(90deg,#a3e635,#fafafa);-webkit-background-clip:text;
-    background-clip:text;color:transparent}
+  .stat{font-size:var(--step-3);font-weight:800;letter-spacing:-.03em;line-height:1}
   .stat-sub{color:var(--ink-faint);font-size:var(--step--1);margin-top:.6rem}
   .media{aspect-ratio:16/7;border-radius:14px;margin-bottom:1.4rem;overflow:hidden;
-    border:1px solid var(--line);background:linear-gradient(135deg,#14201b,#0d0d10);
-    display:grid;place-items:center;color:var(--ink-faint);font-size:.85rem;text-align:center;padding:1rem}
+    border:1px solid var(--line);
+    background:linear-gradient(135deg,#18181b,#09090b);display:grid;place-items:center;
+    color:var(--ink-faint);font-size:.85rem;text-align:center;padding:1rem}
+  .media.ratio-wide{aspect-ratio:16/9;margin-bottom:0}
   .tile-b .media{aspect-ratio:4/5;margin:0 0 1.2rem}
-  .svc-list{list-style:none;margin-top:1.2rem;display:grid;gap:.55rem}
-  .svc-list li{display:flex;gap:.6rem;align-items:baseline;color:var(--ink-soft);font-size:var(--step--1)}
-  .svc-list li::before{content:"▲";color:var(--lime);font-size:.7rem}
+
+  /* ============ GALLERY ============ */
   .gallery{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
   .ph{aspect-ratio:4/5;border-radius:var(--radius);border:1px solid var(--line);
-    background:linear-gradient(135deg,#121a14,#0c0c0e);display:grid;place-items:center;
+    background:linear-gradient(135deg,#141416,#0c0c0e);display:grid;place-items:center;
     color:var(--ink-faint);font-size:.85rem;text-align:center;padding:1rem;
     transition:transform .35s var(--ease),border-color .35s var(--ease)}
-  .ph:hover{transform:scale(1.03);border-color:rgba(163,230,53,.4)}
-  .contact-card{background:linear-gradient(135deg,rgba(163,230,53,.08),rgba(255,255,255,.02));
+  .ph:hover{transform:scale(1.03);border-color:var(--line-strong)}
+
+  /* ============ CONTACT ============ */
+  .contact-card{background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
     border:1px solid var(--line-strong);border-radius:calc(var(--radius)*1.3);
-    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-    padding:clamp(2rem,5vw,3.5rem);text-align:center}
-  .contact-card h2{font-size:var(--step-2);letter-spacing:-.02em;margin-bottom:.6rem;text-transform:uppercase}
+    backdrop-filter:blur(18px);padding:clamp(2rem,5vw,3.5rem);text-align:center}
+  .contact-card h2{font-size:var(--step-2);letter-spacing:-.02em;margin-bottom:.6rem}
   .contact-card p{color:var(--ink-soft);margin-bottom:1.6rem}
+
+  /* ============ FOOTER ============ */
   footer.site{border-top:1px solid var(--line);padding:2.5rem 0 3rem;text-align:center;
     color:var(--ink-faint);font-size:.82rem}
   footer.site .disclaimer{margin-top:.8rem;font-size:.72rem;opacity:.75;max-width:62ch;margin-inline:auto}
+
+  /* ============ MOTION SAFETY ============ */
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none!important;transition:none!important}
     html{scroll-behavior:auto}
     [data-reveal]{opacity:1!important;filter:none!important;transform:none!important}
   }
+</style>
+
+<style>:root{--brand:#dc2626;--brand-dark:#7f1d1d;--accent:#f59e0b;}
+  .hero .kicker{background:#7f1d1d26;color:#f59e0b;}
+  .tile .icon{background:#7f1d1d33;color:#f59e0b;}
+  .stat{color:#f59e0b;}
 </style>
 </head>
 <body>
@@ -154,53 +193,49 @@
 
 <header class="site">
   <div class="wrap nav">
-    <a class="brand" href="#top">Rockys <span>Gym</span></a>
-    <a class="btn lime" href="#join">Join Now</a>
+    <a class="brand" href="#top">Rockys Gym</a>
+    <a class="btn" href="#contact">Book Now</a>
   </div>
 </header>
 
 <main id="top">
+  <!-- HERO -->
   <section class="hero">
     <div class="wrap">
-      <span class="kicker" data-hero-stagger>Hill County · Nizampet, Hyderabad</span>
-      <h1 data-hero-stagger>Rockys Gym<br><em>— 5.0★ from 635 members</em></h1>
-      <p class="lead" data-hero-stagger>The highest-rated gym in Nizampet — strength training, aerobics and more, above Tipsy Tipsy Bakery near More Super Market. This demo shows how Rockys could look online.</p>
+      <span class="kicker" data-hero-stagger>Nizampet, Hyderabad</span>
+      <h1 data-hero-stagger>Rockys Gym<br><em>— experience it online</em></h1>
+      <p class="lead" data-hero-stagger>Everything about Rockys Gym in one premium place — browse, choose, and book directly on WhatsApp in seconds.</p>
       <div class="cta-row" data-hero-stagger>
-        <a class="btn lime" href="https://wa.me/917675994969?text=Namaste!%20I%20want%20to%20know%20about%20Rockys%20Gym%20membership."
-           aria-label="WhatsApp Rockys Gym about membership">💬 WhatsApp for Membership</a>
-        <a class="btn ghost" href="#why">Why Rockys</a>
+        <a class="btn wa" href="https://wa.me/917675994969?text=Namaste!%20I%20found%20Rockys%20Gym%20online%20and%20want%20to%20know%20more."
+           aria-label="Chat with Rockys Gym on WhatsApp">💬 WhatsApp Us</a>
+        <a class="btn ghost" href="#services">Explore Services</a>
       </div>
     </div>
   </section>
 
-  <section id="why">
+  <!-- BENTO FEATURES -->
+  <section id="services">
     <div class="wrap">
-      <h2 class="sec" data-reveal="0">635 members. One perfect score.</h2>
-      <p class="sec-sub" data-reveal="0.05">Every claim below comes from Rockys Gym's public Justdial and magicpin listings — nothing invented.</p>
+      <h2 class="sec" data-reveal="0">Why customers choose Rockys Gym</h2>
+      <p class="sec-sub" data-reveal="0.05">Replace with the business's real strengths — verified public info only. Asymmetric Bento Grid, glassmorphic tiles, micro-borders.</p>
       <div class="bento">
         <article class="tile t-a" data-reveal="0" data-tilt>
-          <div class="media">Owner's real gym photo goes here (16:7) — floor / equipment shot</div>
+          <div class="media">Owner's real photo goes here (16:7)</div>
           <h3>Nizampet's #1 rated gym</h3>
           <p>A perfect 5.0 average across 635 Justdial ratings — the biggest review base of any gym in the area, earned one workout at a time.</p>
-          <ul class="svc-list">
-            <li>Strength training — full free-weight &amp; machine floor</li>
-            <li>Aerobics — group sessions</li>
-            <li>Unisex — trained guidance for every member</li>
-            <li>Prime location — Hill County, opp. More Super Market</li>
-          </ul>
-          <a class="btn lime" style="margin-top:1.6rem" href="https://wa.me/917675994969?text=Namaste!%20I%20want%20to%20know%20about%20Rockys%20Gym%20membership.">Claim your membership</a>
+          <a class="btn" style="margin-top:1.6rem" href="#contact">Book a free trial visit</a>
         </article>
         <article class="tile tile-b t-b" data-reveal="0.08" data-tilt>
-          <div class="media">Photo (4:5) — training floor / storefront</div>
+          <div class="media">Photo (4:5)</div>
           <div class="stat">5.0★</div>
-          <p class="stat-sub">635 Justdial ratings · Hill County, Nizampet</p>
+          <p class="stat-sub">635 Justdial ratings — every one of them public. (from Justdial)</p>
         </article>
         <article class="tile t-c" data-reveal="0" data-tilt>
-          <div class="icon">▲</div>
+          <div class="icon">◔</div>
           <h3>Train with guidance</h3>
           <p>Strength and aerobics coaching per the gym's public listings — whether it's your first rep or your five-hundredth.</p>
         </article>
-        <article class="tile t-d" data-reveal="0.08" data-tilt>
+        <article class="tile t-d" data-reveal="0" data-tilt>
           <div class="icon">📍</div>
           <h3>Easy to reach</h3>
           <p>Above Tipsy Tipsy Bakery, opposite More Super Market, Hill County / Anish Residency, Nizampet.</p>
@@ -209,26 +244,27 @@
     </div>
   </section>
 
+  <!-- GALLERY -->
   <section id="gallery" style="border-block:1px solid var(--line);background:#0c0c0e">
     <div class="wrap">
-      <h2 class="sec" data-reveal="0">Inside Rockys</h2>
+      <h2 class="sec" data-reveal="0">Gallery</h2>
       <p class="sec-sub" data-reveal="0.05">Owner's real photos go here after approval — placeholders until then.</p>
       <div class="gallery">
-        <div class="ph" data-reveal="0" data-tilt>Weight floor<br>(from owner)</div>
-        <div class="ph" data-reveal="0.06" data-tilt>Aerobics zone<br>(from owner)</div>
-        <div class="ph" data-reveal="0.12" data-tilt>Members in action<br>(from owner)</div>
-        <div class="ph" data-reveal="0.18" data-tilt>Reception<br>(from owner)</div>
+        <div class="ph" data-reveal="0.00" data-tilt>Strength Zone<br>(from owner)</div>
+        <div class="ph" data-reveal="0.06" data-tilt>Cardio & Aerobics<br>(from owner)</div>
+        <div class="ph" data-reveal="0.12" data-tilt>Training Floor<br>(from owner)</div>
+        <div class="ph" data-reveal="0.18" data-tilt>Inside Rockys<br>(from owner)</div>
       </div>
     </div>
   </section>
 
-  <section id="join">
+  <!-- CONTACT -->
+  <section id="contact">
     <div class="wrap">
       <div class="contact-card" data-reveal="0" data-tilt>
-        <h2>Start today</h2>
-        <p>Rockys Gym · Hill County, Nizampet, Hyderabad · 76759 94969</p>
-        <a class="btn lime" href="https://wa.me/917675994969?text=Namaste!%20I%20want%20to%20know%20about%20Rockys%20Gym%20membership."
-           aria-label="WhatsApp Rockys Gym about membership">💬 Chat on WhatsApp</a>
+        <h2>Visit or message us</h2>
+        <p>Rockys Gym · Nizampet, Hyderabad</p>
+        <a class="btn wa" href="https://wa.me/917675994969" aria-label="Open WhatsApp chat with Rockys Gym">💬 Chat on WhatsApp</a>
       </div>
     </div>
   </section>
@@ -236,8 +272,8 @@
 
 <footer class="site">
   <div class="wrap">
-    <p>© 2026 Rockys Gym · Hill County, Nizampet, Hyderabad</p>
-    <p class="disclaimer">This is a design demo created by Gowtham (web designer, Hyderabad) for preview purposes only. Not the official website. Business details shown are from public Justdial/magicpin listings (5.0★, 635 ratings); photos are placeholders until the owner approves.</p>
+    <p>© 2026-09-18 Rockys Gym · Nizampet, Hyderabad</p>
+    <p class="disclaimer">This is a design demo created by Gowtham (web designer, Hyderabad) for preview purposes only. Not the official website. Business details shown are from public listings; photos are placeholders until the owner approves.</p>
   </div>
 </footer>
 
